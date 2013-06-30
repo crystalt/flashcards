@@ -1,6 +1,9 @@
 Session.setDefault("newUserRegister", false);
 Session.setDefault("currentRoom", null);
 
+// When commenting, question object
+Session.setDefault("commenting", null);
+
 var trimInput = function(val) {
   return val.replace(/^\s*|\s*$/g, "");
 };
@@ -55,6 +58,7 @@ Template.mainLoggedIn.events({
   }
 });
 
+
 Template.mainLoggedIn.currRoom = function() {
   return Session.get("currentRoom");
 }
@@ -93,6 +97,11 @@ Template.renderUsers.user_text = function() {
   }
   return this.user || "All Users."
 }
+
+Template.mainLoggedIn.commenting = function() {
+  return Session.get("commenting");
+};
+
 
 Template.register.events({
   'submit #register-form' : function(e, t) {
@@ -150,4 +159,5 @@ function resetSession() {
   Session.set("newUserRegister", false);
   Session.set("currentRoom", null);
   console.log(Session.get("currentRoom"));
+  Session.set("commenting", null);
 }

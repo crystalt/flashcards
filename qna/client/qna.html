@@ -63,6 +63,9 @@
         {{> invitePeople}}
         {{#if currRoom}}
           {{> questions}}
+          {{#if commenting}}
+            {{> comments}}
+          {{/if}}
         {{/if}}
       </div>
     </div>
@@ -152,4 +155,23 @@
     {{text}} <span class="label label-info">{{asker}}</span> <span class="label">{{humanTime}}</span>
     <input type="button" value="Add comment" class="addComment">
   </li>
+</template>
+
+<template name="comments">
+  <h2>
+    {{question}}
+    <span class="label label-info">{{asker}}</span> <span class="label">{{humanTime}}</span>
+  </h2>
+
+  {{#each commentList}}
+    {{> commentItem}}
+  {{/each}}
+
+  <textarea></textarea>
+  <br>
+  <input type="button" value="Add comment" class="addComment">
+</template>
+
+<template name="commentItem">
+  <pre>{{this}}</pre>
 </template>

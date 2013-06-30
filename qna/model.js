@@ -30,8 +30,8 @@ Questions = new Meteor.Collection("questions");
  * text -- comment string
  * timestamp -- time that the comment was made
  * user -- user ID of commenter
- * isAnswer -- boolean saying whether this comment is the answer
  * question -- question ID that this comment belongs to
+ * isAnswer -- boolean saying whether this comment is the answer
  * upvotes -- number of upvotes
  * downvotes -- number of downvotes
  *

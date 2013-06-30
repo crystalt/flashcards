@@ -68,5 +68,48 @@ Template.question.humanTime = function() {
   return date.toLocaleDateString() + " " + date.toLocaleTimeString();
 };
 
+Template.question.events({
+  'click .addComment' : function() {
+    Session.set("commenting", this);
+  }
+});
 
+Template.comments.question = function() {
+  return Session.get("commenting").text;
+};
 
+Template.comments.asker = function() {
+  // TODO: Maybe replace with getUser()?
+  var asker = Meteor.users.findOne({ _id: Session.get("commenting").user });
+  if (asker) {
+    return asker.profile.email;
+  }
+  return null;
+};
+
+Template.comments.humanTime = function() {
+  var date = new Date(Session.get("commenting").timestamp);
+  return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+};
+
+Template.comments.events({
+  'click .addComment' : function(event, template) {
+    var comment = template.find("textarea").value;
+    if (comment) {
+      // Insert into Comments collection
+      Comments.insert({
+        text : comment,
+        timestamp : (new Date()).getTime(),
+        user : Meteor.userId(),
+        question : Session.get("commenting")._id,
+        isAnswer : false,
+        upvotes : 0,
+        downvotes : 0
+
+      });
+
+      // Clear comment text area
+      template.find("textarea").value = "";
+    }
+  }
+});
