@@ -9,3 +9,12 @@
     display: block;
     width: 95%
 }
+
+.cursorHand {
+  cursor: hand !important;
+  cursor: pointer !important;
+}
+
+input[data-action="add"]{
+  box-shadow: none;
+}

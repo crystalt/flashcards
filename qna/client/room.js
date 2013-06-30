@@ -10,40 +10,88 @@ Template.createRoom.events({
           { _id : Meteor.userId() },
           { $addToSet : { "profile.qna_rooms" : roomId } }
       );
+      Session.set("currentRoom", getRoom(roomId));
     }
-  },
-
-  'change #changeRoom' : function(event, template) {
-    Session.set("currentRoom", getRoomName(event.currentTarget.value));
   }
 });
 
-Template.createRoom.rooms = function() {
+Template.changeRoom.events({
+  'change #changeRoom' : function(event, template) {
+    Session.set("currentRoom", getRoom(event.currentTarget.value));
+  }
+});
+
+Template.createRoom.rooms = Template.changeRoom.rooms =  function() {
   if (Meteor.user()) {
-    return _.map(Meteor.user().profile.qna_rooms, function(roomId) {
-      return { id : roomId, name : getRoomName(roomId) };
-    });
+    return _.values(Session.get('allRooms'));
   }
 };
 
-Template.createRoom.currentRoom = function() {
+Template.mainLoggedIn.updateAllRooms = Template.createRoom.updateAllRooms = function() {
   if (Meteor.user()) {
+    var roomList = Meteor.user().profile.qna_rooms;
+    var rooms = {};
+    _.each(roomList, function(roomId) {
+      rooms[roomId] = getRoomFromDB(roomId);
+    });
+    Session.set("allRooms", rooms);
+  }
+}
+
+Template.createRoom.currentRoom = Template.changeRoom.currentRoom = function() {
+  if (Meteor.user() && !Session.get("currentRoom")) {
     var rooms = Meteor.user().profile.qna_rooms;
     if (!_.isEmpty(rooms)) {
-      Session.set("currentRoom", getRoomName(rooms[0]));
+      Session.set("currentRoom", getRoom(rooms[0]));
     }
   }
   return Session.get("currentRoom");
 };
+
+Template.invitePeople.isAdmin = function() {
+  var room = Session.get('currentRoom');
+  if (room && room.admin === Meteor.userId()) {
+    return true;
+  }
+  return false;
+}
+
+Template.invitePeople.events({
+   'click [data-action="add"]' : function(event, template) {
+     console.log(template)
+     $(template.find(".invites")).append('<input type="email" placeholder="Email address">');
+     console.log(" crystal is a rockstar!;")
+   },
+   'keydown [data-action="add"]' : function(event, template) {
+    console.log(template)
+    $(template.find(".invites")).append('<input type="email" placeholder="Email address">');
+   },
+  'submit #invitePeople' : function(event, template) {
+    event.preventDefault();
+    var emailDivs = template.findAll('[type="email"]');
+    var emails = _.map(emailDivs, function(email){
+      return email.value;
+    });
+
+  }
+});
 
 /**
  * @param {String} roomId
  * @return {String} room name, or null if room not found
  */
 function getRoomName(roomId) {
-  var room = Rooms.findOne({ _id : roomId });
+  var room = getRoom(roomId);
   if (room) {
     return room.name;
   }
   return null;
+}
+
+function getRoom(roomId) {
+  return Session.get('allRooms')[roomId];
+}
+
+function getRoomFromDB(roomId) {
+  return Rooms.findOne({_id: roomId});
 }
