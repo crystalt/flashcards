@@ -59,10 +59,14 @@ Template.questions.questionList = function() {
     return {};
   }
   var tag_filter = Session.get("tag_filter");
+  var user_filter = Session.get("user_filter");
   var sel = {room: Session.get("currentRoom")._id}
 
   if (tag_filter) {
     sel.tags = tag_filter;
+  }
+  if (user_filter) {
+    sel.user = user_filter;
   }
 
   if (Session.get("currentRoom") && Session.get("currentRoom")._id) {
@@ -215,11 +219,4 @@ Template.comments.commentList = function() {
   return null;
 };
 
-Template.renderTags.events({
-  'mousedown .tag': function () {
-    if (Session.equals('tag_filter', this.tag))
-      Session.set('tag_filter', null);
-    else
-      Session.set('tag_filter', this.tag);
-  }
-});
+

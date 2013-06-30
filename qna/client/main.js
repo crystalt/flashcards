@@ -80,17 +80,28 @@ Template.renderTags.selected = function () {
   return Session.equals('tag_filter', this.tag) ? 'selected' : '';
 };
 
+Template.renderUsers.selected = function () {
+  return Session.equals('user_filter', this.user) ? 'selected' : '';
+};
+
+Template.renderUsers.events({
+  'mousedown .user': function() {
+    console.log("rendeing user");
+    if(Session.equals('user_filter', this.user)) {
+      Session.set('user_filter', null);
+    }
+    else {
+      Session.set('user_filter', this.user);
+    }
+  }
+});
+
 Template.renderTags.events({
   'mousedown .tag': function () {
-    console.log("Rendering tags");
-    console.log("this.tag =" + this.tag);
-    console.log(Session.get('tag_filter'));
-    console.log(Session.equals('tag_filter', this.tag));
     if (Session.equals('tag_filter', this.tag)) {
       Session.set('tag_filter', null);
     }
     else {
-      console.log("Should come here.")
       Session.set('tag_filter', this.tag);
     }
   }
