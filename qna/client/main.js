@@ -16,9 +16,6 @@ var isValidPassword = function(val, field) {
 }
 
 var createUserOption = function(email, password, secret) {
-  console.log(email);
-  console.log(password);
-  console.log(secret);
   Accounts.createUser({email: email, password : password, profile: {qna_rooms:secret}}, function(err){
     if (err) {
       // Inform the user that account creation failed
@@ -44,6 +41,13 @@ Template.mainLogin.events({
     Session.set("newUserRegister", true);
   }
 });
+
+Template.mainLoggedIn.events({
+  'click #logout' : function() {
+    Meteor.logout();
+    Session.set("newUserRegister", false);
+  }
+})
 
 
 Template.register.events({
