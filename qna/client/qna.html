@@ -116,17 +116,18 @@
 </template>
 
 <template name="changeRoom">
-  <h2>{{currentRoom.name}}</h2>
+  <h2>
+    {{currentRoom.name}}
 
-  <form class="form-inline">
-
-    <select id="changeRoom">
-      {{#each rooms}}
-      <option value="{{_id}}">{{name}}</option>
-      {{/each}}
-    </select>
-
-  </form>
+    <div class="btn-group">
+      <button data-toggle="dropdown" class="btn btn-primary btn-mini dropdown-toggle">Change room <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        {{#each rooms}}
+          <li class="cursorHand changeRoom" data-target="{{_id}}"><a>{{name}}</a></li>
+        {{/each}}
+      </ul>
+    </div>
+  </h2>
 
 </template>
 

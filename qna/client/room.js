@@ -16,8 +16,8 @@ Template.createRoom.events({
 });
 
 Template.changeRoom.events({
-  'change #changeRoom' : function(event, template) {
-    Session.set("currentRoom", getRoom(event.currentTarget.value));
+  'click .changeRoom' : function(event, template) {
+    Session.set("currentRoom", getRoom($(event.currentTarget).attr("data-target")));
   }
 });
 
