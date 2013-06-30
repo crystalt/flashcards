@@ -8,7 +8,7 @@ Template.mainLogin.register = function() {
 }
 
 Template.mainLogin.events({
-  'click #createAccount' : function() {
+  'click #register-user' : function() {
     Session.set("newUserRegister", true);
   }
 })
