@@ -1,4 +1,33 @@
 Session.setDefault("newUserRegister", false);
+
+var trimInput = function(val) {
+  return val.replace(/^\s*|\s*$/g, "");
+};
+
+var isValidPassword = function(val, field) {
+  if (val.length >= 6) {
+    return true;
+  } else {
+    Session.set('displayMessage', 'Error &amp; Too short.')
+    return false;
+  }
+}
+
+var createUserOption = function(email, password, secret) {
+  console.log(email);
+  console.log(password);
+  console.log(secret);
+  Accounts.createUser({email: email, password : password, profile: {qna_rooms:secret}}, function(err){
+    if (err) {
+      // Inform the user that account creation failed
+    } else {
+      // Success. Account has been created and the user
+      // has logged in successfully.
+    }
+
+  });
+};
+
 Template.main.loggedIn = function () {
   return Meteor.userId();
 };
@@ -20,26 +49,18 @@ Template.register.events({
     var email = t.find('#account-email').value
         , password = t.find('#account-password').value
         , secret_key = t.find('#account-room-key').value;
-
-    var createUserOption = function(secret) {
-      Accounts.createUser({email: email, password : password, profile: {qna_rooms:secret}}, function(err){
-        if (err) {
-          // Inform the user that account creation failed
-        } else {
-          // Success. Account has been created and the user
-          // has logged in successfully.
-        }
-
-      });
-    }
     // Trim and validate the input
-    var room = Rooms.findOne({_id: secret_key});
-    if (room) {
+    email = trimInput(email);
+    if (isValidPassword(password)) {
+      var room = Rooms.findOne({_id: secret_key});
+      if (room) {
 
-      createUserOption([secret_key]);
-    }
-    else {
-      createUserOption([]);
+        createUserOption(email, password, [secret_key]);
+      }
+      else {
+        createUserOption(email, password, []);
+      }
+      return true;
     }
     return false;
   }
