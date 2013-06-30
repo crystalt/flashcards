@@ -201,3 +201,10 @@ Template.comments.events({
     }
   }
 });
+
+Template.comments.commentList = function() {
+  if (Session.get("commenting")) {
+    return Comments.find({ question : Session.get("commenting")._id }, {sort: {timestamp: -1}}).fetch();
+  }
+  return null;
+};
