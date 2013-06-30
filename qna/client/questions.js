@@ -35,7 +35,7 @@ Template.questions.events(okCancelEvents(
         Questions.insert({
           text : value,
           user : Meteor.userId(),
-          room : Session.get("currentRoom"), // TODO : Change to Session.get("currentRoom")._id
+          room : Session.get("currentRoom")._id,
           timestamp : (new Date()).getTime(),
           answered : false,
           tags : [],
@@ -49,8 +49,7 @@ Template.questions.events(okCancelEvents(
 ));
 
 Template.questions.questionList = function() {
-  // TODO : Change to Session.get("currentRoom")._id
-  return Questions.find({ room : Session.get("currentRoom") }, {sort: {timestamp: -1}}).fetch();
+  return Questions.find({ room : Session.get("currentRoom")._id }, {sort: {timestamp: -1}}).fetch();
 };
 
 
