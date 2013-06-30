@@ -59,6 +59,8 @@
       {{> changeRoom}}
       {{> createRoom}}
       {{> invitePeople}}
+
+      {{> questions}}
     </div>
   </div>
 
@@ -75,7 +77,6 @@
   <div>
     Hello.
   </div>
-
 
 </template>
 
@@ -122,4 +123,18 @@
     <input type="submit" class="btn btn-primary" value="Create room">
   </form>
   {{updateAllRooms}}
+</template>
+
+<template name="questions">
+  <h3>Ask some questions</h3>
+  <input type="text" id="questionInput" placeholder="What's your question?">
+  <ul id="questions">
+    {{#each questionList}}
+      {{> question}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="question">
+  <li>{{text}} <span class="label label-info">{{asker}}</span> <span class="label">{{humanTime}}</span></li>
 </template>

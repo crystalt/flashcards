@@ -18,3 +18,11 @@
 input[data-action="add"]{
   box-shadow: none;
 }
+
+#questions .label {
+  opacity: 0.7;
+}
+
+ul {
+  list-style: none outside none;
+}

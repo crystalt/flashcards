@@ -12,10 +12,6 @@ if (Meteor.isServer) {
       var notify = Meteor.require('notification-component');
       console.log("notify ->" + notify);
       return notify;
-    },
-
-    'test' : function() {
-      return "hi";
     }
   });
 }
