@@ -161,7 +161,7 @@ Template.renderUsers.user_text = function() {
   if (this.user) {
     return getUser(this.user).profile.email
   }
-  return this.user || "All Users."
+  return this.user || "All users"
 }
 
 Template.mainLoggedIn.commenting = function() {

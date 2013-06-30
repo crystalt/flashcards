@@ -39,11 +39,9 @@
 <template name="mainLoggedIn">
   <div class="container-fluid">
     <div class="row-fluid">
-      <div class="span2">
-        <div class="well sidebar-nav">
-          {{> renderTags}}
-          {{> renderUsers}}
-        </div>
+      <div class="span2 well sidebar-nav">
+        {{> renderTags}}
+        {{> renderUsers}}
       </div>
       <div class="span10">
         <div class="pull-right">
@@ -67,7 +65,7 @@
 
 <template name="renderUsers">
   <div id="user-filter" class="user-list">
-    <div class="label"> Show:</div>
+    <li class="nav-header">Users</li>
     {{#each users}}
     <div class="user {{selected}}">
       {{user_text}} <span class="count">({{count}})</span>
@@ -78,9 +76,9 @@
 
 <template name="renderTags">
   <div id="tag-filter" class="tag-list">
-    <div class="label">Show: </div>
+    <li class="nav-header">Tags</li>
     {{#each tags}}
-      <div class="tag  {{selected}}">
+      <div class="tag {{selected}}">
         {{tag_text}} <span class="count">({{count}})</span>
       </div>
     {{/each}}
@@ -138,7 +136,7 @@
   <h3>Ask some questions</h3>
   <div id="items-view">
     <div id="new-question-box">
-      <input type="text" id="questionInput" placeholder="What's your question?">
+      <input type="text" id="questionInput" placeholder="What's your question?" style="width: 100%">
     </div>
     <ul id="item-list">
       {{#each questionList}}
@@ -194,7 +192,9 @@
   <h2>
     <a class="cursorHand" id="goToQuestions">{{currentRoom.name}}</a> » {{question}}
   </h2>
-  <p class="muted">Asked by <span class="label label-info">{{asker}}</span> · <span class="label">{{humanTime}}</span></p>
+  <p class="muted">
+    Asked by <span class="label label-info">{{asker}}</span> on <span class="label">{{humanTime}}</span>
+  </p>
 
   <br>
   <h3 class="page-header">
@@ -211,6 +211,7 @@
 
   <h3>Your answer</h3>
   <textarea style="width: inherit" rows="5"></textarea>
+  <br>
   <input type="button" value="Post your answer" class="addComment btn btn-primary btn-large">
   <br>
   <br>
@@ -219,6 +220,8 @@
 <template name="commentItem">
 
   <p>{{this.text}}</p>
-  <small class="muted">Answered by <span class="label label-info">{{asker}}</span> · <span class="label">{{humanTime}}</span></small>
+  <small class="muted">
+    Answered by <span class="label label-info">{{asker}}</span> on <span class="label">{{humanTime}}</span>
+  </small>
   <hr>
 </template>
