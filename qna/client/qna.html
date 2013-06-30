@@ -62,9 +62,10 @@
         {{> createRoom}}
         {{> invitePeople}}
         {{#if currRoom}}
-          {{> questions}}
           {{#if commenting}}
             {{> comments}}
+          {{else}}
+            {{> questions}}
           {{/if}}
         {{/if}}
       </div>
@@ -115,7 +116,7 @@
 </template>
 
 <template name="changeRoom">
-  <p>This be your current room: {{currentRoom.name}}</p>
+  <h2>{{currentRoom.name}}</h2>
 
   <form class="form-inline">
 
@@ -198,19 +199,33 @@
 
 <template name="comments">
   <h2>
-    {{question}}
-    <span class="label label-info">{{asker}}</span> <span class="label">{{humanTime}}</span>
+    <a class="cursorHand" id="goToQuestions">{{currentRoom.name}}</a> » {{question}}
   </h2>
+  <p class="muted">Asked by <span class="label label-info">{{asker}}</span> · <span class="label">{{humanTime}}</span></p>
+
+  <br>
+  <h3 class="page-header">
+    {{#if commentList.length}}
+      {{commentList.length}} answers
+    {{else}}
+      No answers yet. Be the first to answer this question!
+    {{/if}}
+  </h3>
 
   {{#each commentList}}
     {{> commentItem}}
   {{/each}}
 
-  <textarea></textarea>
+  <h3>Your answer</h3>
+  <textarea style="width: inherit" rows="5"></textarea>
+  <input type="button" value="Post your answer" class="addComment btn btn-primary btn-large">
   <br>
-  <input type="button" value="Add comment" class="addComment">
+  <br>
 </template>
 
 <template name="commentItem">
+
   <p>{{this.text}}</p>
+  <small class="muted">Answered by <span class="label label-info">{{asker}}</span> · <span class="label">{{humanTime}}</span></small>
+  <hr>
 </template>

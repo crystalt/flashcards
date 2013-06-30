@@ -126,7 +126,7 @@ Template.renderTags.tag_text = function() {
 Template.renderUsers.users = function()  {
   var user_infos = [];
   var total_count = 0;
-  var currRoom = Session.get("currentRoom")._id;
+  var currRoom = Session.get("currentRoom");
   if (currRoom)  {
   Questions.find({room: currRoom._id}).forEach(function (question) {
    var user_info = _.findWhere(user_infos, {user: question.user });

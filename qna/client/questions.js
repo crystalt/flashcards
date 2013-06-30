@@ -96,12 +96,12 @@ Template.question_item.adding_tag = function () {
 
 ////////// Question //////////
 
-Template.question_item.asker = function() {
+Template.question_item.asker = Template.commentItem.asker = function() {
   // TODO: Maybe replace with getUser()?
   return Meteor.users.findOne({ _id: this.user }).profile.email;
 };
 
-Template.question_item.humanTime = function() {
+Template.question_item.humanTime = Template.commentItem.humanTime = function() {
   var date = new Date(this.timestamp);
   return date.toLocaleDateString() + " " + date.toLocaleTimeString();
 };
@@ -202,6 +202,9 @@ Template.comments.events({
       // Clear comment text area
       template.find("textarea").value = "";
     }
+  },
+  'click #goToQuestions' : function() {
+    Session.set("commenting", null);
   }
 });
 
