@@ -1,0 +1,11 @@
+/* CSS declarations go here */
+.login-form.well {
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-form.well input {
+    display: block;
+    width: 95%
+}
