@@ -12,17 +12,20 @@ var isValidPassword = function(val, field) {
     Session.set('displayMessage', 'Error &amp; Too short.')
     return false;
   }
-}
+};
 
 var createUserOption = function(email, password, secret) {
-  Accounts.createUser({email: email, password : password, profile: {qna_rooms:secret}}, function(err){
+  Accounts.createUser({
+    email : email,
+    password : password,
+    profile : { qna_rooms : secret, email : email }
+  }, function(err) {
     if (err) {
       // Inform the user that account creation failed
     } else {
       // Success. Account has been created and the user
       // has logged in successfully.
     }
-
   });
 };
 

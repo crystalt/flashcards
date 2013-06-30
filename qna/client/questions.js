@@ -58,7 +58,7 @@ Template.questions.questionList = function() {
 
 Template.question.asker = function() {
   // TODO: Maybe replace with getUser()?
-  return _.first(Meteor.users.findOne({ _id: this.user }).emails).address;
+  return Meteor.users.findOne({ _id: this.user }).profile.email;
 };
 
 Template.question.humanTime = function() {
