@@ -77,14 +77,33 @@ var getUser = function(userId) {
 }
 
 Template.renderTags.selected = function () {
-  return Session.equals('question_id', this._id) ? "selected" : "";
+  return Session.equals('tag_filter', this.tag) ? 'selected' : '';
 };
+
+Template.renderTags.events({
+  'mousedown .tag': function () {
+    console.log("Rendering tags");
+    console.log("this.tag =" + this.tag);
+    console.log(Session.get('tag_filter'));
+    console.log(Session.equals('tag_filter', this.tag));
+    if (Session.equals('tag_filter', this.tag)) {
+      Session.set('tag_filter', null);
+    }
+    else {
+      console.log("Should come here.")
+      Session.set('tag_filter', this.tag);
+    }
+  }
+});
 
 Template.renderTags.tags = function () {
   var tag_infos = [];
   var total_count = 0;
-
-  Questions.find({room: Session.get('getCurrentRoom')}).forEach(function (question) {
+  if (!Session.get("currentRoom")) {
+    tag_infos.unshift({tag: null, count: total_count});
+    return tag_infos;
+  }
+  Questions.find({room: Session.get('currentRoom')._id}).forEach(function (question) {
     _.each(question.tags, function (tag) {
       var tag_info = _.find(tag_infos, function (x) { return x.tag === tag; });
       if (! tag_info)
@@ -94,7 +113,6 @@ Template.renderTags.tags = function () {
     });
     total_count++;
   });
-
   tag_infos = _.sortBy(tag_infos, function (x) { return x.tag; });
   tag_infos.unshift({tag: null, count: total_count});
 
@@ -110,9 +128,8 @@ Template.renderUsers.users = function()  {
   var total_count = 0;
   var currRoom = Session.get("currentRoom")._id;
   if (currRoom)  {
-  Questions.find({room: currRoom}).forEach(function (question) {
+  Questions.find({room: currRoom._id}).forEach(function (question) {
    var user_info = _.findWhere(user_infos, {user: question.user });
-    console.log("user info ->" + user_info);
     if (!user_info) {
       user_infos.push({user: question.user, count: 1});
     }
@@ -193,10 +210,8 @@ Template.login.events({
 });
 
 function resetSession() {
-  console.log("Resetting");
   Session.set("newUserRegister", false);
   Session.set("currentRoom", null);
-  console.log(Session.get("currentRoom"));
   Session.set("commenting", null);
 }
 
@@ -234,4 +249,23 @@ var activateInput = function (input) {
   input.focus();
   input.select();
 };
+
+var QnARouter = Backbone.Router.extend({
+  routes: {
+    ":currentRoom": "main"
+  },
+  main: function (currentRoom) {
+    Session.set("currentRoom", currentRoom);
+    Session.set("tag_filter", null);
+  },
+  setList: function (currentRoom) {
+    this.navigate(currentRoom, true);
+  }
+});
+
+Router = new QnARouter;
+
+Meteor.startup(function () {
+  Backbone.history.start({pushState: true});
+});
 

@@ -129,11 +129,14 @@ Template.question_item.events({
   'click .remove': function (evt) {
     var tag = this.tag;
     var id = this.questionId;
+    console.log("REMOVING TAG");
+    console.log(tag);
+    console.log(id);
 
     evt.target.parentNode.style.opacity = 0;
     // wait for CSS animation to finish
     Meteor.setTimeout(function () {
-      Todos.update({_id: id}, {$pull: {tags: tag}});
+      Questions.update({_id: id}, {$pull: {tags: tag}});
     }, 300);
   }
 });
@@ -208,3 +211,12 @@ Template.comments.commentList = function() {
   }
   return null;
 };
+
+Template.renderTags.events({
+  'mousedown .tag': function () {
+    if (Session.equals('tag_filter', this.tag))
+      Session.set('tag_filter', null);
+    else
+      Session.set('tag_filter', this.tag);
+  }
+});
