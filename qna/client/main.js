@@ -46,11 +46,53 @@ Template.mainLogin.events({
 
 Template.mainLoggedIn.events({
   'click #logout' : function() {
-    Meteor.logout();
     resetSession();
+    Meteor.logout(function(err) {
+      // callback
+      Session.set("ses",false);
+      Session.set("currentRoom", null);
+    });
   }
 });
 
+Template.mainLoggedIn.currRoom = function() {
+  return Session.get("currentRoom");
+}
+
+var getUser = function(userId) {
+  return Meteor.users.findOne({_id : userId});
+}
+
+Template.renderUsers.users = function()  {
+  var user_infos = [];
+  var total_count = 0;
+  var currRoom = Session.get("currentRoom");
+  if (currRoom)  {
+  Questions.find({room: currRoom}).forEach(function (question) {
+   var user_info = _.findWhere(user_infos, {user: question.user });
+    console.log("user info ->" + user_info);
+    if (!user_info) {
+      user_infos.push({user: question.user, count: 1});
+    }
+    else {
+      user_info.count++;
+      Session.set("newUserRegister", false);
+    }
+    total_count++;
+  });
+  }
+
+  user_infos = _.sortBy(user_infos, function(x) { return x.user});
+  user_infos.unshift({user: null, count: total_count});
+  return user_infos;
+}
+
+Template.renderUsers.user_text = function() {
+  if (this.user) {
+    return getUser(this.user).profile.email
+  }
+  return this.user || "All Users."
+}
 
 Template.register.events({
   'submit #register-form' : function(e, t) {
@@ -104,6 +146,8 @@ Template.login.events({
 });
 
 function resetSession() {
+  console.log("Resetting");
   Session.set("newUserRegister", false);
   Session.set("currentRoom", null);
+  console.log(Session.get("currentRoom"));
 }

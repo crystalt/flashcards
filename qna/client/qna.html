@@ -43,28 +43,41 @@
         <div class="well sidebar-nav">
           <ul class="nav nav-list">
             <li class="nav-header">Tags</li>
-            <li>Tag 1 </li>
-            <li>Tag 1 </li>
-            <li>Tag 1 </li>
-            <li>Tag 1 </li>
+            <li>Tag 1</li>
+            <li>Tag 1</li>
+            <li>Tag 1</li>
+            <li>Tag 1</li>
             {{> renderTags}}
+            <li class="nav-header">Users</li>
+            {{> renderUsers}}
           </ul>
         </div>
       </div>
       <div class="span10">
-      <div class="pull-right">
-        <a id="logout">Logout</a>
+        <div class="pull-right">
+          <a id="logout">Logout</a>
+        </div>
+        {{updateAllRooms}}
+        {{> changeRoom}}
+        {{> createRoom}}
+        {{> invitePeople}}
+        {{#if currRoom}}
+          {{> questions}}
+        {{/if}}
       </div>
-      {{updateAllRooms}}
-      {{> changeRoom}}
-      {{> createRoom}}
-      {{> invitePeople}}
-
-      {{> questions}}
     </div>
   </div>
+</template>
 
-
+<template name="renderUsers">
+  <div id="user-filter" class="user-list">
+    <div class="label"> Show:</div>
+    {{#each users}}
+    <div class="tag {{selected}}">
+      {{user_text}} <span class="count">({{count}})</span>
+    </div>
+  {{/each}}
+  </div>
 </template>
 
 <template name="renderTags">
@@ -77,7 +90,6 @@
   <div>
     Hello.
   </div>
-
 </template>
 
 <template name="hello">
