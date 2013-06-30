@@ -73,7 +73,6 @@ a, a:visited, a:active {
 }
 
 #tag-filter .label {
-  float: left;
   margin-top: 9px;
   margin-left: 12px;
   margin-right: 8px;
@@ -94,7 +93,6 @@ a, a:visited, a:active {
 }
 
 #user-filter .label {
-  float: left;
   margin-top: 9px;
   margin-left: 12px;
   margin-right: 8px;
@@ -112,6 +110,10 @@ a, a:visited, a:active {
 #user-filter .count {
   font-weight: normal;
   padding-left: 2px;
+}
+
+.sidebar-nav .tag, .sidebar-nav .user {
+  float: none;
 }
 
 #new-question-box {

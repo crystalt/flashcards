@@ -64,7 +64,7 @@
 </template>
 
 <template name="renderUsers">
-  <div id="user-filter" class="user-list">
+  <div id="user-filter">
     <li class="nav-header">Users</li>
     {{#each users}}
     <div class="user {{selected}}">
@@ -75,7 +75,7 @@
 </template>
 
 <template name="renderTags">
-  <div id="tag-filter" class="tag-list">
+  <div id="tag-filter">
     <li class="nav-header">Tags</li>
     {{#each tags}}
       <div class="tag {{selected}}">
