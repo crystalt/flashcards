@@ -4,6 +4,15 @@ Session.setDefault("currentRoom", null);
 // When commenting, question object
 Session.setDefault("commenting", null);
 
+// Name of currently selected tag for filtering
+Session.set('tag_filter', null);
+
+// When adding tag to a question, ID of the question
+Session.set('editing_addtag', null);
+
+// When editing question text, ID of the question
+Session.set('editing_question', null);
+
 var trimInput = function(val) {
   return val.replace(/^\s*|\s*$/g, "");
 };
@@ -65,6 +74,35 @@ Template.mainLoggedIn.currRoom = function() {
 
 var getUser = function(userId) {
   return Meteor.users.findOne({_id : userId});
+}
+
+Template.renderTags.selected = function () {
+  return Session.equals('question_id', this._id) ? "selected" : "";
+};
+
+Template.renderTags.tags = function () {
+  var tag_infos = [];
+  var total_count = 0;
+
+  Questions.find({room: Session.get('getCurrentRoom')}).forEach(function (question) {
+    _.each(question.tags, function (tag) {
+      var tag_info = _.find(tag_infos, function (x) { return x.tag === tag; });
+      if (! tag_info)
+        tag_infos.push({tag: tag, count: 1});
+      else
+        tag_info.count++;
+    });
+    total_count++;
+  });
+
+  tag_infos = _.sortBy(tag_infos, function (x) { return x.tag; });
+  tag_infos.unshift({tag: null, count: total_count});
+
+  return tag_infos;
+};
+
+Template.renderTags.tag_text = function() {
+  return this.tag || "All tags";
 }
 
 Template.renderUsers.users = function()  {
@@ -161,3 +199,39 @@ function resetSession() {
   console.log(Session.get("currentRoom"));
   Session.set("commenting", null);
 }
+
+
+
+// Returns an event map that handles the "escape" and "return" keys and
+// "blur" events on a text input (given by selector) and interprets them
+// as "ok" or "cancel".
+var okCancelEvents = function (selector, callbacks) {
+  var ok = callbacks.ok || function () {};
+  var cancel = callbacks.cancel || function () {};
+
+  var events = {};
+  events['keyup '+selector+', keydown '+selector+', focusout '+selector] =
+      function (evt) {
+        if (evt.type === "keydown" && evt.which === 27) {
+          // escape = cancel
+          cancel.call(this, evt);
+
+        } else if (evt.type === "keyup" && evt.which === 13 ||
+            evt.type === "focusout") {
+          // blur/return/enter = ok/submit if non-empty
+          var value = String(evt.target.value || "");
+          if (value)
+            ok.call(this, value, evt);
+          else
+            cancel.call(this, evt);
+        }
+      };
+  return events;
+};
+
+
+var activateInput = function (input) {
+  input.focus();
+  input.select();
+};
+
