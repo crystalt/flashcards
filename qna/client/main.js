@@ -126,6 +126,12 @@ Template.createRoom.rooms = function() {
 };
 
 Template.createRoom.currentRoom = function() {
+  if (Meteor.user()) {
+    var rooms = Meteor.user().profile.qna_rooms;
+    if (!_.isEmpty(rooms)) {
+      Session.set("currentRoom", getRoomName(rooms[0]));
+    }
+  }
   return Session.get("currentRoom");
 };
 
