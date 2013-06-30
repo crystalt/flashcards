@@ -49,7 +49,10 @@ Template.questions.events(okCancelEvents(
 ));
 
 Template.questions.questionList = function() {
-  return Questions.find({ room : Session.get("currentRoom")._id }, {sort: {timestamp: -1}}).fetch();
+  if (Session.get("currentRoom") && Session.get("currentRoom")._id) {
+    return Questions.find({ room : Session.get("currentRoom")._id }, {sort: {timestamp: -1}}).fetch();
+  }
+  return null;
 };
 
 
