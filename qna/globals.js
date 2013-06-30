@@ -8,6 +8,20 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
   Meteor.methods({
+    'sendEmail' : function(to, subject, text) {
+      this.unblock();
+      if(!Meteor.user()) {
+        throw new Meteor.Error(403, "not logged in.");
+      }
+      console.log("sending email");
+      Email.send({
+        to : to,
+        from : "noreply@awesomeqa.com",
+        subject : subject,
+        text : text
+      })
+
+    },
     'notify': function notify() {
       var notify = Meteor.require('notification-component');
       console.log("notify ->" + notify);
