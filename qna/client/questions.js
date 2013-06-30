@@ -113,6 +113,7 @@ Template.question_item.humanTime = Template.commentItem.humanTime = function() {
 Template.question_item.events({
   'click .addComment' : function() {
     Session.set("commenting", this);
+    Session.set("questioning", false);
   },
   'click .check' : function() {
     Questions.update(this.id, {$set: {answered: !this.answered}});
@@ -209,6 +210,7 @@ Template.comments.events({
   },
   'click #goToQuestions' : function() {
     Session.set("commenting", null);
+    Session.set("questioning", true);
   }
 });
 

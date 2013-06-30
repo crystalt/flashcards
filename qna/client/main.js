@@ -2,7 +2,7 @@ Session.setDefault("newUserRegister", false);
 Session.setDefault("currentRoom", null);
 
 Session.setDefault("inviting", false);
-
+Session.setDefault("addingRoom", false);
 Session.setDefault("questioning", true);
 
 // When commenting, question object
@@ -68,6 +68,25 @@ Template.mainLoggedIn.events({
       Session.set("ses",false);
       Session.set("currentRoom", null);
     });
+  },
+  'click #questions' : function() {
+    Session.set("commenting", null);
+    Session.set("inviting", false);
+    Session.set("addingRoom", false);
+    Session.set("questioning", true);
+  },
+  'click #invite' : function() {
+    Session.set("commenting", null);
+    Session.set("inviting", true);
+    Session.set("addingRoom", false);
+    Session.set("questioning", false);
+  },
+  'click #addRoom' : function() {
+    Session.set("commenting", null);
+    Session.set("inviting", false);
+    Session.set("addingRoom", true);
+    Session.set("questioning", false);
+    console.log("adding room");
   }
 });
 
@@ -85,7 +104,21 @@ Template.mainLoggedIn.questioning = function() {
   return Session.get("questioning");
 };
 
+Template.mainLoggedIn.questionsActive = function() {
+  return (Session.get("questioning") || Session.get("commenting")) ? "active" : '';
+};
 
+Template.mainLoggedIn.inviteActive = function() {
+  return Session.get("inviting") ? "active" : '';
+};
+
+Template.mainLoggedIn.newRoomActive = function() {
+  return Session.get("addingRoom") ? "active" : '';
+};
+
+Template.mainLoggedIn.addingRoom = function() {
+  return Session.get("addingRoom");
+}
 
 var getUser = function(userId) {
   return Meteor.users.findOne({_id : userId});
@@ -234,6 +267,9 @@ function resetSession() {
   Session.set("newUserRegister", false);
   Session.set("currentRoom", null);
   Session.set("commenting", null);
+  Session.set("inviting", false);
+  Session.set("addingRoom", false);
+  Session.set("questioning", true);
 }
 
 

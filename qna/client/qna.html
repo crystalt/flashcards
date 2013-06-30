@@ -45,9 +45,12 @@
 <template name="mainLoggedIn">
   <div class="container-fluid">
     <div class="row-fluid">
-      <div class="span2 well sidebar-nav">
+      <div class="span2 well sidebar-nav nav nav-list">
+        <li class="{{questionsActive}}"><a class="cursorHand" id="questions">Questions</a></li>
         {{> renderTags}}
         {{> renderUsers}}
+        <li class="{{inviteActive}}"><a class="cursorHand" id="invite">Invite People</a></li>
+        <li class="{{newRoomActive}}"><a class="cursorHand" id="addRoom">Add new room</a></li>
       </div>
       <div class="span10">
         <div class="pull-right">
@@ -66,8 +69,10 @@
             {{> changeRoom}}
             {{> questions}}
           {{/if}}
-
         {{else}}
+          {{> createRoom}}
+        {{/if}}
+        {{#if addingRoom}}
           {{> createRoom}}
         {{/if}}
       </div>
@@ -134,7 +139,7 @@
 </template>
 
 <template name="createRoom">
-  <h3>You have no rooms. Create a new room.</h3>
+  <h3>Create a new room.</h3>
 
   <form class="form-inline">
     <input type="text" placeholder="Name of room">
