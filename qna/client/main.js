@@ -1,5 +1,7 @@
 Session.setDefault("newUserRegister", false);
 
+Session.setDefault("currentRoom", null);
+
 var trimInput = function(val) {
   return val.replace(/^\s*|\s*$/g, "");
 };
@@ -28,19 +30,20 @@ var createUserOption = function(email, password, secret) {
   });
 };
 
+
 Template.main.loggedIn = function () {
   return Meteor.userId();
 };
 
 Template.mainLogin.register = function() {
   return Session.get("newUserRegister");
-}
+};
 
 Template.mainLogin.events({
   'click #register-user' : function() {
     Session.set("newUserRegister", true);
   }
-})
+});
 
 
 Template.register.events({
@@ -93,3 +96,47 @@ Template.login.events({
     return false;
   }
 });
+
+Template.createRoom.events({
+  'submit' : function(event, template) {
+    var roomName = template.find("input[type=text]").value;
+    if (roomName) {
+      var roomId = Rooms.insert({
+        name : roomName,
+        admin : Meteor.userId()
+      });
+      Meteor.users.update(
+        { _id : Meteor.userId() },
+        { $addToSet : { "profile.qna_rooms" : roomId } }
+      );
+    }
+  },
+
+  'change #changeRoom' : function(event, template) {
+    Session.set("currentRoom", getRoomName(event.currentTarget.value));
+  }
+});
+
+Template.createRoom.rooms = function() {
+  if (Meteor.user()) {
+    return _.map(Meteor.user().profile.qna_rooms, function(roomId) {
+      return { id : roomId, name : getRoomName(roomId) };
+    });
+  }
+};
+
+Template.createRoom.currentRoom = function() {
+  return Session.get("currentRoom");
+};
+
+/**
+ * @param {String} roomId
+ * @return {String} room name, or null if room not found
+ */
+function getRoomName(roomId) {
+  var room = Rooms.findOne({ _id : roomId });
+  if (room) {
+    return room.name;
+  }
+  return null;
+}
