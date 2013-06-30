@@ -1,6 +1,10 @@
 Session.setDefault("newUserRegister", false);
 Session.setDefault("currentRoom", null);
 
+Session.setDefault("inviting", false);
+
+Session.setDefault("questioning", true);
+
 // When commenting, question object
 Session.setDefault("commenting", null);
 
@@ -68,9 +72,20 @@ Template.mainLoggedIn.events({
 });
 
 
-Template.mainLoggedIn.currRoom = function() {
-  return Session.get("currentRoom");
-}
+Template.mainLoggedIn.commenting = function() {
+  return Session.get("commenting");
+};
+
+Template.mainLoggedIn.inviting = function() {
+  return Session.get("inviting");
+};
+
+
+Template.mainLoggedIn.questioning = function() {
+  return Session.get("questioning");
+};
+
+
 
 var getUser = function(userId) {
   return Meteor.users.findOne({_id : userId});
@@ -163,11 +178,6 @@ Template.renderUsers.user_text = function() {
   }
   return this.user || "All users"
 }
-
-Template.mainLoggedIn.commenting = function() {
-  return Session.get("commenting");
-};
-
 
 Template.register.events({
   'submit #register-form' : function(e, t) {

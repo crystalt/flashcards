@@ -38,7 +38,7 @@ Template.mainLoggedIn.updateAllRooms = Template.createRoom.updateAllRooms = func
   }
 }
 
-Template.createRoom.currentRoom = Template.changeRoom.currentRoom = Template.comments.currentRoom = function() {
+Template.mainLoggedIn.currentRoom = Template.createRoom.currentRoom = Template.changeRoom.currentRoom = Template.comments.currentRoom = function() {
   if (Meteor.user() && !Session.get("currentRoom")) {
     var rooms = Meteor.user().profile.qna_rooms;
     if (!_.isEmpty(rooms)) {
